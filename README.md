@@ -12,9 +12,13 @@ Entities :
 
 - @PostMapping("/add")- Adds a new Booking
 - @GetMapping("/details")-Get list of Bookings
-- @DeleteMapping("/cancel/{id}")-Cancel a Booking
--  @PostMapping("/fare/{userId}")
+- @GetMapping("/details/{id}")
+- @PutMapping("/cancel/{bookingId}")
+- @PostMapping("/fare/{userId}")
 - @PutMapping("/updateBalance/{id}")
+- @PostMapping("/addingTaxi")
+- @GetMapping("/available")
+- 
 
 - @PostMapping("/user/signup")
 - @PostMapping("/user/login")

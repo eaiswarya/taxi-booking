@@ -3,10 +3,10 @@ package com.example.taxibooking.service;
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
+import com.example.taxibooking.contract.response.CancelResponse;
 import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
-import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BookingService {
+
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final TaxiRepository taxiRepository;
     private final ModelMapper modelMapper;
 
 
@@ -44,26 +44,28 @@ public class BookingService {
 
     }
 
-    public BookingResponse getBooking(Long id) {
+    public BookingResponse getBooking(long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
         return modelMapper.map(booking, BookingResponse.class);
     }
+    public String cancelBookingById(Long id){
+        Booking booking=bookingRepository.findById(id).orElseThrow(()->new RuntimeException("Booking not found"));
 
-    public void cancelBooking(Long id) {
-        if (!bookingRepository.existsById(id)) {
-            throw new EntityNotFoundException("Booking not found");
-        }
-        bookingRepository.deleteById(id);
+        Booking newBooking=Booking.builder()
+                .status(Status.valueOf("CANCELLED"))
+                .build();
 
+        bookingRepository.save(newBooking);
+        return "Booked taxi has been cancelled with"+id+"successfully";
     }
 
-    public BookingResponse book(Long userId, double distance, BookingRequest request) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+    public BookingResponse calculateFare(long userId, double distance, BookingRequest request) {
 
         double minimumCharge = 10.0;
         double fare = distance * minimumCharge;
+
         Booking booking = Booking.builder()
                 .pickupLocation(request.getPickupLocation())
                 .dropoutLocation(request.getDropoutLocation())
@@ -74,8 +76,6 @@ public class BookingService {
 
         booking = bookingRepository.save(booking);
         return modelMapper.map(booking, BookingResponse.class);
-
-
     }
 }
 

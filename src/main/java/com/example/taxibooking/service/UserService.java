@@ -5,7 +5,6 @@ import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.UpdateAccountRequest;
 import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
-import com.example.taxibooking.exception.InvalidLoginException;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
@@ -58,21 +57,19 @@ public class UserService {
             return user.getId();
         }
 
-        throw new InvalidLoginException();
+        throw new EntityNotFoundException("Invalid login");
     }
 
     public UpdateAccountResponse updateBalance(long id, UpdateAccountRequest request) {
         User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        user = User.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .accountBalance(user.getAccountBalance() + request.getAccountBalance())
-                .build();
-        User saveUser = userRepository.save(user);
-        return modelMapper.map(saveUser, UpdateAccountResponse.class);
-
-    }
+            user = User.builder()
+                    .id(user.getId())
+                    .name(user.getName())
+                    .email(user.getEmail())
+                    .password(user.getPassword())
+                    .accountBalance(user.getAccountBalance()+ request.getAccountBalance())
+                    .build();
+            User updatedAccountBalance=userRepository.save(user);
+            return modelMapper.map(updatedAccountBalance, UpdateAccountResponse.class);
+        }
 }

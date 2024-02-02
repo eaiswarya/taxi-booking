@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,14 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Getter
 
 public class BookingResponse {
     private Long id;
+    private String name;
     private String pickupLocation;
     private String dropoutLocation;
     private LocalDateTime booking_time;
-    private double fare;
-    @Enumerated(EnumType.STRING)
+    private Double fare;
     private Status status;
 
 }

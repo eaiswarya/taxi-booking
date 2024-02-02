@@ -90,10 +90,10 @@
 		{
 			"name": "cancel",
 			"request": {
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/booking/cancel/1",
+					"raw": "http://localhost:8082/booking/cancel/2?userId=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -102,7 +102,13 @@
 					"path": [
 						"booking",
 						"cancel",
-						"1"
+						"2"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
 					]
 				}
 			},
@@ -179,6 +185,43 @@
 						"2"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddTaxi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"driverName\":\"Anil Kumar\",\r\n   \"licenseNumber\":\"ksu76sd\",\r\n    \"currentLocation\":\"purathur\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/taxi/addingTaxi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"taxi",
+						"addingTaxi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "availableTaxis",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

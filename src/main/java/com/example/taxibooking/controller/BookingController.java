@@ -2,13 +2,13 @@ package com.example.taxibooking.controller;
 
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
+import com.example.taxibooking.contract.response.CancelResponse;
 import com.example.taxibooking.service.BookingService;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,15 +40,14 @@ public class BookingController {
 
     }
 
-    @DeleteMapping("/cancel/{id}")
-    public void cancelBooking(@PathVariable Long id) {
-
-        bookingService.cancelBooking(id);
+    @PutMapping("/cancel/{bookingId}")
+    public String cancelBooking(@PathVariable Long id){
+        return bookingService.cancelBookingById(id);
     }
 
     @PostMapping("/fare/{userId}")
-    public void calculateFare(@PathVariable Long userId, @RequestParam double distance, @RequestBody BookingRequest request) {
-        bookingService.book(userId, distance, request);
+    public void calculateFare(@PathVariable long userId, @RequestParam double distance, @RequestBody BookingRequest request) {
+        bookingService.calculateFare(userId,distance,request);
     }
 
 

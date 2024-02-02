@@ -24,7 +24,7 @@ public class Taxi {
 
     private Long id;
     private String driverName;
-    private String licenceNumber;
+    private String licenseNumber;
     private String currentLocation;
 
 }

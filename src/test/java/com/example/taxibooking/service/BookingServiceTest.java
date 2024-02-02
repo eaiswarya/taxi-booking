@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,17 +31,16 @@ public class BookingServiceTest {
 
     private BookingRepository bookingRepository;
     private UserRepository userRepository;
-    private TaxiRepository taxiRepository;
     private ModelMapper modelMapper;
-    private UserService userService;
     private BookingService bookingService;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
         bookingRepository = mock(BookingRepository.class);
+
         modelMapper = mock(ModelMapper.class);
-        bookingService = new BookingService(bookingRepository, userRepository, taxiRepository, modelMapper);
+        bookingService = new BookingService(bookingRepository, userRepository, modelMapper);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class BookingServiceTest {
                 .bookingTime(LocalDateTime.parse(LocalDateTime.now().toString()))
                 .status(Status.BOOKED)
                 .build();
-        BookingResponse expectedResponse = new BookingResponse(1L, "location1", "location2", LocalDateTime.now(), 10.0, Status.BOOKED);
+        BookingResponse expectedResponse = new BookingResponse(1L, "name", "location1", "location2", LocalDateTime.now(), 10.0, Status.BOOKED);
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
         when(modelMapper.map(booking, BookingResponse.class)).thenReturn(expectedResponse);
         BookingResponse actualResponse = bookingService.addBooking(request);
@@ -72,32 +72,19 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void testCancelBooking() {
+    void testGetBooking() {
         Long id = 1L;
-
-        when(bookingRepository.existsById(id)).thenReturn(true);
-        bookingService.cancelBooking(id);
-        verify(bookingRepository).existsById(id);
-        verify(bookingRepository).deleteById(id);
-    }
-    @Test
-    public void testBook() {
-        double minimumCharge = 10.0;
-        double distance = 10.0;
-        double fare=distance*minimumCharge;
-    BookingRequest request = new BookingRequest("location1", "location2");
-        Booking booking = Booking.builder()
-            .pickupLocation(request.getPickupLocation())
-            .dropoutLocation(request.getDropoutLocation())
-            .bookingTime(LocalDateTime.parse(LocalDateTime.now().toString()))
-            .fare(fare)
-            .status(Status.BOOKED)
-            .build();
-        BookingResponse expectedResponse = new BookingResponse(1L, "location1", "location2", LocalDateTime.now(), 10.0, Status.BOOKED);
-        when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
+        BookingRequest bookingRequest = new BookingRequest("location1", "location2");
+        BookingResponse expectedResponse = new BookingResponse(1L, "name", "location1", "location2", LocalDateTime.now(), 100.0, Status.BOOKED);
+        Booking booking = new Booking();
+        when(modelMapper.map(bookingRequest, Booking.class)).thenReturn(booking);
+        when(bookingRepository.findById(id)).thenReturn(Optional.of(booking));
         when(modelMapper.map(booking, BookingResponse.class)).thenReturn(expectedResponse);
-        BookingResponse actualResponse = bookingService.addBooking(request);
+        BookingResponse actualResponse = bookingService.getBooking(id);
         assertEquals(expectedResponse, actualResponse);
     }
 
 }
+
+
+

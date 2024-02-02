@@ -3,14 +3,17 @@ package com.example.taxibooking.contract.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateAccountResponse {
+@Getter
+public class TaxiResponse {
     private Long id;
-
-    private double accountBalance;
+    private String driverName;
+    private String licenseNumber;
+    private String currentLocation;
 }
