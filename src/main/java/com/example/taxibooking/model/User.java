@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class User {
     @Id
@@ -27,6 +29,6 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Double accountBalance;
+    private double accountBalance;
 
 }

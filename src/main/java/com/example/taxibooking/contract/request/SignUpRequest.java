@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SignupRequest {
+public class SignUpRequest {
     @NotBlank(message = "Name cannot be empty")
     private String name;
 

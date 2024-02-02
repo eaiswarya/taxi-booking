@@ -1,18 +1,19 @@
-package com.example.taxibooking.contract.response;
+package com.example.taxibooking.contract.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    private String token;
-    private String name;
+@Builder
+@Getter
+@Setter
+public class UpdateAccountRequest {
 
+    private double accountBalance;
 }

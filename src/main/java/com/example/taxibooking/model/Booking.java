@@ -31,10 +31,15 @@ public class Booking {
     private Long id;
     private String pickupLocation;
     private String dropoutLocation;
+    private double fare;
     private LocalDateTime bookingTime;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @ManyToOne()
-    private User user;
+    @ManyToOne
+    private User userId;
+    @ManyToOne
+    private Taxi taxiId;
+
+
 
 }

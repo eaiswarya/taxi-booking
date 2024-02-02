@@ -1,26 +1,19 @@
 package com.example.taxibooking.service;
 
-
 import com.example.taxibooking.contract.request.LoginRequest;
-import com.example.taxibooking.contract.request.SignupRequest;
-import com.example.taxibooking.contract.response.SignupResponse;
-
-
+import com.example.taxibooking.contract.request.SignUpRequest;
+import com.example.taxibooking.contract.request.UpdateAccountRequest;
+import com.example.taxibooking.contract.response.SignUpResponse;
+import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.exception.InvalidLoginException;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
-
-
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -30,7 +23,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public SignupResponse signUp(SignupRequest request) {
+    public SignUpResponse signUp(SignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
 
@@ -46,7 +39,7 @@ public class UserService {
 
         user = userRepository.save(user);
 
-        return modelMapper.map(user, SignupResponse.class);
+        return modelMapper.map(user, SignUpResponse.class);
     }
 
     public Long login(LoginRequest request) {
@@ -67,9 +60,18 @@ public class UserService {
         throw new InvalidLoginException();
     }
 
+    public UpdateAccountResponse updateBalance(long id, UpdateAccountRequest request){
+        User user=userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        user=User.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .accountBalance(user.getAccountBalance()+ request.getAccountBalance())
+                .build();
+        User saveUser=userRepository.save(user);
+        return modelMapper.map(saveUser,UpdateAccountResponse.class);
+
+    }
 }
-
-
-
-
-
