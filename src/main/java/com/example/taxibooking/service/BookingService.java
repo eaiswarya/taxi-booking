@@ -58,7 +58,7 @@ public class BookingService {
 
     }
 
-    public BookingResponse book(Long userId, double distance,BookingRequest request) {
+    public BookingResponse book(Long userId, double distance, BookingRequest request) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
 

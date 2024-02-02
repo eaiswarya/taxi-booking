@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -60,18 +61,18 @@ public class UserService {
         throw new InvalidLoginException();
     }
 
-    public UpdateAccountResponse updateBalance(long id, UpdateAccountRequest request){
-        User user=userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public UpdateAccountResponse updateBalance(long id, UpdateAccountRequest request) {
+        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        user=User.builder()
+        user = User.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .accountBalance(user.getAccountBalance()+ request.getAccountBalance())
+                .accountBalance(user.getAccountBalance() + request.getAccountBalance())
                 .build();
-        User saveUser=userRepository.save(user);
-        return modelMapper.map(saveUser,UpdateAccountResponse.class);
+        User saveUser = userRepository.save(user);
+        return modelMapper.map(saveUser, UpdateAccountResponse.class);
 
     }
 }

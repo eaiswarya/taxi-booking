@@ -39,13 +39,15 @@ public class BookingController {
         return bookingService.getBooking(id);
 
     }
+
     @DeleteMapping("/cancel/{id}")
     public void cancelBooking(@PathVariable Long id) {
 
         bookingService.cancelBooking(id);
     }
+
     @PostMapping("/fare/{userId}")
-    public void calculateFare(@PathVariable Long userId, @RequestParam double distance,@RequestBody BookingRequest request){
+    public void calculateFare(@PathVariable Long userId, @RequestParam double distance, @RequestBody BookingRequest request) {
         bookingService.book(userId, distance, request);
     }
 

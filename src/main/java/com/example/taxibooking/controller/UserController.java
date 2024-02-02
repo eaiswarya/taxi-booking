@@ -33,6 +33,7 @@ public class UserController {
     public Long login(@Valid @RequestBody LoginRequest request) {
         return userService.login(request);
     }
+
     @PutMapping("/updateBalance/{id}")
     public ResponseEntity<UpdateAccountResponse> updateBalance(@PathVariable Long id, @RequestBody UpdateAccountRequest request) {
         return ResponseEntity.ok(userService.updateBalance(id, request));
