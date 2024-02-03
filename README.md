@@ -44,5 +44,9 @@ installation:
 ````
 https://github.com/eaiswarya/taxi-booking.git
 ````
+Api Documentation:
+````
+http://localhost:8082/swagger-ui/index.html
+````
 - Open the project.
 - Ensure you have Java and Maven installed.
