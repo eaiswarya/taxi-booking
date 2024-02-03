@@ -2,13 +2,13 @@ package com.example.taxibooking.controller;
 
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.CancelResponse;
+import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,16 +39,18 @@ public class BookingController {
         return bookingService.getBooking(id);
 
     }
-
-    @PutMapping("/cancel/{bookingId}")
-    public String cancelBooking(@PathVariable Long id){
-        return bookingService.cancelBookingById(id);
+    @PostMapping("/cancel/{bookingId}")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long bookingId) {
+        bookingService.cancelBooking(bookingId);
+        return ResponseEntity.ok("Booking cancelled successfully");
     }
-
+    @GetMapping("/nearestTaxi")
+    public List<TaxiResponse> searchTaxi(@RequestParam Long userId, @RequestParam String pickupLocation){
+        return bookingService.searchTaxi(userId, pickupLocation);
+    }
     @PostMapping("/fare/{userId}")
-    public void calculateFare(@PathVariable long userId, @RequestParam double distance, @RequestBody BookingRequest request) {
-        bookingService.calculateFare(userId,distance,request);
+    public void calculateFare(@PathVariable Long userId, @RequestParam Long distance,@RequestBody BookingRequest request){
+       bookingService.calculateFare(userId, distance, request);
     }
-
 
 }

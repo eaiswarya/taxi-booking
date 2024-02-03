@@ -4,6 +4,7 @@ package com.example.taxibooking.controller;
 import com.example.taxibooking.contract.request.LoginRequest;
 import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.UpdateAccountRequest;
+import com.example.taxibooking.contract.response.LoginResponse;
 import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.service.UserService;
@@ -25,17 +26,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(userService.signUp(request));
+    public SignUpResponse userSignup(@Valid @RequestBody SignUpRequest request){
+        return userService.signUp(request);
     }
 
     @PostMapping("/login")
-    public Long login(@Valid @RequestBody LoginRequest request) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
         return userService.login(request);
     }
-
-    @PutMapping("/{id}")
-    public UpdateAccountResponse updateAccountBalance(@PathVariable Long id,@RequestBody UpdateAccountRequest request){
-        return userService.updateBalance(id,request);
+    @PutMapping("/updateBalance/{id}")
+    public ResponseEntity<UpdateAccountResponse> updateBalance(@Valid @PathVariable Long id, @RequestBody UpdateAccountRequest request) {
+        return ResponseEntity.ok(userService.updateBalance(id, request));
     }
 }

@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
+@Builder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Getter
 public class BookingRequest {
     @NotBlank(message="Please enter")
     private String pickupLocation;

@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Getter
-@Setter
 public class UpdateAccountRequest {
-    @NotNull
+    @NotNull(message = "balance should not be blank")
     private double accountBalance;
 }

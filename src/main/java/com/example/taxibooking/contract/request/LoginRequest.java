@@ -8,11 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-
 public class LoginRequest {
     @NotBlank(message = "Email cannot be empty")
     private String email;

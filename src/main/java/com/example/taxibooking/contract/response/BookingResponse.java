@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 
 public class BookingResponse {
     private Long id;
-    private String name;
     private String pickupLocation;
     private String dropoutLocation;
-    private LocalDateTime booking_time;
+    private LocalDateTime bookingTime;
     private Double fare;
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }

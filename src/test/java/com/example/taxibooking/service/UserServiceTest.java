@@ -4,6 +4,7 @@ import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.UserRepository;
+import com.example.taxibooking.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -22,6 +23,7 @@ public class UserServiceTest {
     private ModelMapper modelMapper;
     private PasswordEncoder passwordEncoder;
     private UserService userService;
+    private JwtService jwtService;
 
     @BeforeEach
     public void init() {
@@ -29,7 +31,8 @@ public class UserServiceTest {
         userRepository = mock(UserRepository.class);
         modelMapper = mock(ModelMapper.class);
         passwordEncoder = mock(PasswordEncoder.class);
-        userService = new UserService(userRepository, modelMapper, passwordEncoder);
+        jwtService=mock(JwtService.class);
+        userService = new UserService(userRepository, modelMapper,passwordEncoder,jwtService);
     }
 
     @Test
