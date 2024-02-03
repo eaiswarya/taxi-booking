@@ -102,13 +102,13 @@ public class BookingServiceTest {
     }
     @Test
     void testSearchTaxi() {
-        Long userId = 1L;
+        Long id = 1L;
         String pickupLocation = "Test Location";
-        User mockUser = new User();
+        User user = new User();
         List<Taxi> allTaxis = new ArrayList<>();
         List<TaxiResponse> expectedResponses = new ArrayList<>();
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
         when(taxiRepository.findAll()).thenReturn(allTaxis);
 
@@ -120,7 +120,7 @@ public class BookingServiceTest {
             }
         }
 
-        List<TaxiResponse> actualResponses = bookingService.searchTaxi(userId, pickupLocation);
+        List<TaxiResponse> actualResponses = bookingService.searchTaxi(id, pickupLocation);
 
         assertEquals(expectedResponses, actualResponses);
     }

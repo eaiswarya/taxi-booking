@@ -29,8 +29,6 @@ public class BookingService {
     private final TaxiRepository taxiRepository;
     private final ModelMapper modelMapper;
 
-
-
     public BookingResponse addBooking(BookingRequest request) {
         Booking booking = Booking.builder()
                 .pickupLocation(request.getPickupLocation())

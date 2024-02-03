@@ -12,6 +12,7 @@ import com.example.taxibooking.security.JwtService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,17 +51,26 @@ public class UserService {
         }
         throw new RuntimeException();
     }
-    public UpdateAccountResponse updateBalance(Long id,UpdateAccountRequest request){
-        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        user = User.builder()
+    public UpdateAccountResponse addBalance(Long id,Double accountBalance){
+        User user=userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User not found"));
+        user=User.builder()
                 .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .accountBalance(user.getAccountBalance() + request.getAccountBalance())
+                .name(user.getName())
+                .accountBalance(accountBalance)
                 .build();
-        User updatedUser = userRepository.save(user);
-        return modelMapper.map(updatedUser, UpdateAccountResponse.class);
-
+        user=userRepository.save(user);
+        return modelMapper.map(user,UpdateAccountResponse.class);
     }
+    public UpdateAccountResponse updateBalance(Long id,UpdateAccountRequest request){
+        User user=userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User not found"));
+        user=User.builder()
+               .id(user.getId())
+               .name(user.getName())
+                .email(user.getEmail())
+               .accountBalance(user.getAccountBalance()+request.getAccountBalance())
+               .build();
+        User updatedUser=userRepository.save(user);
+        return modelMapper.map(updatedUser,UpdateAccountResponse.class);
+    }
+
 }

@@ -39,7 +39,7 @@ public class SecurityConfig {
                         (requests) ->
                                 requests.requestMatchers(HttpMethod.POST, "/**")
                                         .permitAll()
-                                        .requestMatchers("/user/**")
+                                        .requestMatchers("/**")
                                         .permitAll()
                                         .requestMatchers(
                                                 "/swagger-ui.html",
