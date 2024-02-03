@@ -7,16 +7,13 @@
 	},
 	"item": [
 		{
-			"name": "register",
+			"name": "signup",
 			"request": {
-				"auth": {
-					"type": "noauth"
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"arun\",\r\n    \"email\":\"arun@gmail.com\",\r\n    \"password\":\"Arun@123\"\r\n}",
+					"raw": "{\r\n    \"name\":\"anu1\",\r\n    \"email\":\"anu1@gmail.com\",\r\n    \"password\":\"anu@123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -117,8 +114,29 @@
 		{
 			"name": "login",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"amal@gmail.com\",\r\n    \"password\":\"Amal@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
@@ -129,7 +147,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n     \"pickupLocation\":\"tirur\",\r\n    \"dropoutLocation\":\"calicut\"\r\n}",
+					"raw": "{\r\n    \"pickupLocation\":\"kalpetta\",\r\n    \"dropoutLocation\":\"sulthan bathery\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -173,7 +191,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/user/updateBalance/2",
+					"raw": "http://localhost:8082/user/1/balance?accountBalance=1000",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -181,8 +199,14 @@
 					"port": "8082",
 					"path": [
 						"user",
-						"updateBalance",
-						"2"
+						"1",
+						"balance"
+					],
+					"query": [
+						{
+							"key": "accountBalance",
+							"value": "1000"
+						}
 					]
 				}
 			},
@@ -219,6 +243,30 @@
 		},
 		{
 			"name": "availableTaxis",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "getById",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "NearTaxi",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "updateBalance",
 			"request": {
 				"method": "GET",
 				"header": []

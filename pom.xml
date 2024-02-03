@@ -14,6 +14,7 @@
 	<name>taxi-booking-system</name>
 	<description>Taxi Booking and Billing System</description>
 	<properties>
+		<spotless.version>2.38.0</spotless.version>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -118,6 +119,34 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<formats>
+						<format>
+							<includes>
+								<include>*.md</include>
+								<include>.gitignore</include>
+							</includes>
+							<trimTrailingWhitespace/>
+							<endWithNewline/>
+							<indent>
+								<tabs>true</tabs>
+								<spacesPerTab>4</spacesPerTab>
+							</indent>
+						</format>
+					</formats>
+					<java>
+						<googleJavaFormat>
+							<version>1.10.0</version>
+							<style>AOSP</style>
+							<reflowLongStrings>true</reflowLongStrings>
+						</googleJavaFormat>
+					</java>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -2,7 +2,7 @@
 
 It is a Taxi Booking and Billing System using Spring Boot, which allows users to book taxis, calculate fares, and handle billing.
 
-Entities : 
+Entities :
 - Booking
 - Taxi
 - User
@@ -10,18 +10,19 @@ Entities :
 
 ## Endpoints
 
-- @PostMapping("/add")- Adds a new Booking
-- @GetMapping("/details")-Get list of Bookings
-- @GetMapping("/details/{id}")
-- @PutMapping("/cancel/{bookingId}")
-- @PostMapping("/fare/{userId}")
-- @PutMapping("/updateBalance/{id}")
-- @PostMapping("/addingTaxi")
-- @GetMapping("/available")
-- 
+1. @PostMapping("/signup")
+2. @PostMapping("/login")
+3. @PutMapping("{id}/balance")
+4. @PutMapping("updateBalance/{id}")
+5.  @PostMapping("/addingTaxi")
+6. @GetMapping("/available")
+7. @PostMapping("/add")
+8. @GetMapping("/details")
+9. @GetMapping("/details/{id}")
+10. @PostMapping("/cancel/{bookingId}")
+11. @GetMapping("/nearestTaxi")
+12. @PostMapping("/fare/{userId}")
 
-- @PostMapping("/user/signup")
-- @PostMapping("/user/login")
 
 
 

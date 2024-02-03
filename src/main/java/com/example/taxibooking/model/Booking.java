@@ -10,16 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name="booking")
+@Table(name = "booking")
 @Getter
 @Setter
 @Builder
@@ -28,18 +27,21 @@ import java.time.LocalDateTime;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
     private String pickupLocation;
     private String dropoutLocation;
     private Double fare;
     private LocalDateTime bookingTime;
+
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @ManyToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "userId")
     private User user;
+
     @ManyToOne
-    @JoinColumn(name="taxiId")
+    @JoinColumn(name = "taxiId")
     private Taxi taxi;
 }

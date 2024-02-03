@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Builder
@@ -15,5 +14,4 @@ import lombok.Setter;
 public class LoginResponse {
     private String name;
     private String token;
-
 }

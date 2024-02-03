@@ -6,6 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CancelResponse {
-        private String cancel;
-
+    private String cancel;
 }

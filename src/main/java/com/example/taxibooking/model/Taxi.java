@@ -11,10 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Getter
-@Table(name="taxi")
+@Table(name = "taxi")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,10 +21,9 @@ import lombok.Setter;
 public class Taxi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
     private String driverName;
     private String licenseNumber;
     private String currentLocation;
-
 }

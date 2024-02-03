@@ -4,6 +4,7 @@ import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/booking")
@@ -37,20 +36,25 @@ public class BookingController {
     @GetMapping("/details/{id}")
     public BookingResponse getBooking(@PathVariable Long id) {
         return bookingService.getBooking(id);
-
     }
+
     @PostMapping("/cancel/{bookingId}")
     public ResponseEntity<String> cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);
         return ResponseEntity.ok("Booking cancelled successfully");
     }
+
     @GetMapping("/nearestTaxi")
-    public List<TaxiResponse> searchTaxi(@RequestParam Long userId, @RequestParam String pickupLocation){
+    public List<TaxiResponse> searchTaxi(
+            @RequestParam Long userId, @RequestParam String pickupLocation) {
         return bookingService.searchTaxi(userId, pickupLocation);
     }
-    @PostMapping("/fare/{userId}")
-    public void calculateFare(@PathVariable Long userId, @RequestParam Long distance,@RequestBody BookingRequest request){
-       bookingService.calculateFare(userId, distance, request);
-    }
 
+    @PostMapping("/fare/{userId}")
+    public void calculateFare(
+            @PathVariable Long userId,
+            @RequestParam Long distance,
+            @RequestBody BookingRequest request) {
+        bookingService.calculateFare(userId, distance, request);
+    }
 }
