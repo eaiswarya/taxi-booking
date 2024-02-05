@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Builder
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class BookingRequest {
     @NotBlank(message = "Please enter")
     private String pickupLocation;

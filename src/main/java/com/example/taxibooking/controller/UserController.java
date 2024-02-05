@@ -1,9 +1,7 @@
 package com.example.taxibooking.controller;
 
-import com.example.taxibooking.contract.request.LoginRequest;
 import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.UpdateAccountRequest;
-import com.example.taxibooking.contract.response.LoginResponse;
 import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.service.UserService;
@@ -30,10 +28,10 @@ public class UserController {
         return userService.signUp(request);
     }
 
-    @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
-        return userService.login(request);
-    }
+    //    @PostMapping("/login")
+    //    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    //        return ResponseEntity.ok(userService.login(request));
+    //    }
 
     @PutMapping("{id}/balance")
     public UpdateAccountResponse addBalance(

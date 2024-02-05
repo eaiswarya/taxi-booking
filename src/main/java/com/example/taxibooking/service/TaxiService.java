@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service
 @RequiredArgsConstructor
-@RequestMapping("/taxi-booking")
 public class TaxiService {
     private final TaxiRepository taxiRepository;
     private final ModelMapper modelMapper;

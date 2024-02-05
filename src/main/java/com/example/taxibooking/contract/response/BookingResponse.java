@@ -1,16 +1,12 @@
 package com.example.taxibooking.contract.response;
 
 import com.example.taxibooking.constant.Status;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,7 +17,5 @@ public class BookingResponse {
     private String dropoutLocation;
     private LocalDateTime bookingTime;
     private Double fare;
-
-    @Enumerated(EnumType.STRING)
     private Status status;
 }

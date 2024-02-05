@@ -69,10 +69,10 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<TaxiResponse> searchTaxi(Long userId, String pickupLocation) {
+    public List<TaxiResponse> searchTaxi(Long id, String pickupLocation) {
         User user =
                 userRepository
-                        .findById(userId)
+                        .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("User not found"));
         List<Taxi> allTaxies = taxiRepository.findAll();
         List<Taxi> availableTaxies = new ArrayList<>();
@@ -88,26 +88,5 @@ public class BookingService {
                     .map(taxi -> modelMapper.map(taxi, TaxiResponse.class))
                     .collect(Collectors.toList());
         }
-    }
-
-    public BookingResponse calculateFare(Long userId, double distance, BookingRequest request) {
-        User user =
-                userRepository
-                        .findById(userId)
-                        .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        double minimumCharge = 10.0;
-        double fare = distance * minimumCharge;
-
-        Booking booking =
-                Booking.builder()
-                        .pickupLocation(request.getPickupLocation())
-                        .dropoutLocation(request.getDropoutLocation())
-                        .bookingTime(LocalDateTime.now())
-                        .fare(fare)
-                        .status(Status.BOOKED)
-                        .build();
-
-        booking = bookingRepository.save(booking);
-        return modelMapper.map(booking, BookingResponse.class);
     }
 }

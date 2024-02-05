@@ -30,7 +30,7 @@ public class UserControllerTest {
     void testAddBalance() throws Exception {
         Long id = 1L;
         Double accountBalance = 100.0;
-        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L, 100.0);
+        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L,"name","name@gmail.com",100.0);
         when(userService.addBalance(any(Long.class), any(Double.class)))
                 .thenReturn(expectedResponse);
         mockMvc.perform(
@@ -45,8 +45,8 @@ public class UserControllerTest {
     @Test
     void testUpdateBalance() throws Exception {
         Long id = 1L;
-        UpdateAccountRequest request = new UpdateAccountRequest(100);
-        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L, 100);
+        UpdateAccountRequest request = new UpdateAccountRequest(100.0);
+        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L,"name","name@gmail.com",100.0);
         when(userService.updateBalance(any(Long.class), any(UpdateAccountRequest.class)))
                 .thenReturn(expectedResponse);
 

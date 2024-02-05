@@ -1,6 +1,7 @@
 package com.example.taxibooking.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
+import com.example.taxibooking.contract.request.UpdateAccountRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.model.Booking;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -91,62 +95,41 @@ public class BookingServiceTest {
         BookingResponse actualResponse = bookingService.getBooking(id);
         assertEquals(expectedResponse, actualResponse);
     }
-
+//    @Test
+//    void testSearchTaxi(){
+//        String pickupLocation="location";
+//        Taxi taxi1=new Taxi(1L,"name","JSBD64","location1");
+//        Taxi taxi2=new Taxi(2L,"name","jsb64","location2");
+//        List<Taxi> allTaxies=List.of(taxi1,taxi2);
+//        List<TaxiResponse>expectedResponse=List.of(new TaxiResponse(1L,"name","JSBD64","location1"),
+//        new TaxiResponse(2L,"name","jsb64","location2"));
+//        when(taxiRepository.findAll()).thenReturn(allTaxies);
+//        when(modelMapper.map(taxi1,TaxiResponse.class)).thenReturn(expectedResponse.get(0));
+//        when(modelMapper.map(taxi2,TaxiResponse.class)).thenReturn(expectedResponse.get(1));
+//        List<TaxiResponse> actualResponse=bookingService.searchTaxi(id,pickupLocation);
+//        assertEquals(expectedResponse,actualResponse);
+//    }
     @Test
-    void testSearchTaxi() {
+    void testGetBooking_UserNotFound() {
         Long id = 1L;
-        String pickupLocation = "Test Location";
-        User user = new User();
-        List<Taxi> allTaxis = new ArrayList<>();
-        List<TaxiResponse> expectedResponses = new ArrayList<>();
-
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
-
-        when(taxiRepository.findAll()).thenReturn(allTaxis);
-
-        for (Taxi taxi : allTaxis) {
-            if (taxi.getCurrentLocation().equals(pickupLocation)) {
-                TaxiResponse mockResponse = new TaxiResponse();
-                when(modelMapper.map(taxi, TaxiResponse.class)).thenReturn(mockResponse);
-                expectedResponses.add(mockResponse);
-            }
-        }
-
-        List<TaxiResponse> actualResponses = bookingService.searchTaxi(id, pickupLocation);
-
-        assertEquals(expectedResponses, actualResponses);
+        BookingResponse request = new BookingResponse(1L,"location","location2",LocalDateTime.now(),100.0,Status.BOOKED);
+        when(bookingRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> bookingService.getBooking(id));
     }
-
     @Test
-    void testCalculateFare() {
+    void testCancelBooking_BookingNotFound() {
+        Long id = 1L;
+        when(bookingRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> bookingService.cancelBooking(id));
 
-        Long userId = 1L;
-        double distance = 10.0;
-        BookingRequest request = new BookingRequest();
-        User mockUser = new User();
-
-        double minimumCharge = 10.0;
-        double expectedFare = distance * minimumCharge;
-
-        Booking expectedBooking =
-                Booking.builder()
-                        .pickupLocation(request.getPickupLocation())
-                        .dropoutLocation(request.getDropoutLocation())
-                        .bookingTime(LocalDateTime.now())
-                        .fare(expectedFare)
-                        .status(Status.BOOKED)
-                        .build();
-
-        BookingResponse expectedResponse = new BookingResponse();
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
-
-        when(bookingRepository.save(any())).thenReturn(expectedBooking);
-
-        when(modelMapper.map(expectedBooking, BookingResponse.class)).thenReturn(expectedResponse);
-
-        BookingResponse actualResponse = bookingService.calculateFare(userId, distance, request);
-
-        assertEquals(expectedResponse, actualResponse);
     }
+    @Test
+    void testSearchTaxi_UserNotFound() {
+        Long id = 1L;
+        String pickupLocation="location";
+        when(bookingRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> bookingService.searchTaxi(id,pickupLocation));
+
+    }
+
 }

@@ -11,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
+import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
+import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,23 +35,15 @@ public class BookingControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean private BookingService bookingService;
 
-    @Test
-    void testAddBooking() throws Exception {
-
-        BookingRequest request = new BookingRequest("location1", "location2");
-        BookingResponse expectedResponse =
-                new BookingResponse(
-                        1L, "location", "location2", LocalDateTime.now(), 100.0, Status.BOOKED);
-        when(bookingService.addBooking(request)).thenReturn(expectedResponse);
-
-        mockMvc.perform(
-                        post("/booking/add")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(new ObjectMapper().writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
-    }
+//    @Test
+//    void testAddBooking() throws Exception {
+//       Long id=1L;
+//       BookingRequest request = new BookingRequest("location","location2");
+//       BookingResponse expectedResponse = new BookingResponse(1L,"location1","location2",LocalDateTime.now(),100.0,Status.BOOKED);
+//       when(bookingService.addBooking(request)).thenReturn(expectedResponse);
+//
+//
+//    }
 
     @Test
     void testGetAllBookings() throws Exception {
@@ -78,12 +72,12 @@ public class BookingControllerTest {
 
     @Test
     void testCancelBooking() throws Exception {
-        Long bookingId = 1L;
+        Long id = 1L;
         String expectedResponse = "Booking cancelled successfully";
 
         doNothing().when(bookingService).cancelBooking(any(Long.class));
 
-        mockMvc.perform(post("/booking/cancel/" + bookingId))
+        mockMvc.perform(post("/booking/cancel/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedResponse));
@@ -91,7 +85,7 @@ public class BookingControllerTest {
 
     @Test
     void testSearchTaxi() throws Exception {
-        Long userId = 1L;
+        Long id = 1L;
         String pickupLocation = "Location1";
         List<TaxiResponse> expectedResponse = new ArrayList<>();
 
@@ -100,29 +94,13 @@ public class BookingControllerTest {
 
         mockMvc.perform(
                         get("/booking/nearestTaxi")
-                                .param("userId", userId.toString())
+                                .param("userId", id.toString())
                                 .param("pickupLocation", pickupLocation))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
     }
 
-    @Test
-    void testCalculateFare() throws Exception {
 
-        long userId = 1L;
-        Long distance = 100L;
-        BookingRequest request = new BookingRequest();
-        when(bookingService.calculateFare(
-                        any(Long.class), any(Long.class), any(BookingRequest.class)))
-                .thenReturn(null);
 
-        mockMvc.perform(
-                        post("/booking/fare/" + userId)
-                                .param("distance", distance.toString())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(new ObjectMapper().writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
 }

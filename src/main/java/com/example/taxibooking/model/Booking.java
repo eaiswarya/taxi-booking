@@ -2,8 +2,6 @@ package com.example.taxibooking.model;
 
 import com.example.taxibooking.constant.Status;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +19,9 @@ import lombok.Setter;
 @Table(name = "booking")
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +31,7 @@ public class Booking {
     private String dropoutLocation;
     private Double fare;
     private LocalDateTime bookingTime;
-
-    @Enumerated(EnumType.STRING)
+    private Double distance;
     private Status status;
 
     @ManyToOne

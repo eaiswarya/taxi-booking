@@ -49,12 +49,4 @@ public class BookingController {
             @RequestParam Long userId, @RequestParam String pickupLocation) {
         return bookingService.searchTaxi(userId, pickupLocation);
     }
-
-    @PostMapping("/fare/{userId}")
-    public void calculateFare(
-            @PathVariable Long userId,
-            @RequestParam Long distance,
-            @RequestBody BookingRequest request) {
-        bookingService.calculateFare(userId, distance, request);
-    }
 }
