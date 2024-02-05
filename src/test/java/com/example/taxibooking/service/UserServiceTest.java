@@ -121,14 +121,5 @@ public class UserServiceTest {
         assertThrows(EntityAlreadyExistsException.class, () -> userService.signUp(request));
 
     }
-//    @Test
-//    void testEntityAlreadyExistsException() {
-//       String entity="User";
-//       EntityAlreadyExistsException exception =assertThrows(EntityAlreadyExistsException.class,()->{
-//           throw new EntityAlreadyExistsException(entity);
-//       });
-//       assertEquals(entity,exception.getEntity());
-//       assertEquals(entity,exception.getMessage());
-//       assertEquals(0L,exception.getId());
-//    }
+
 }

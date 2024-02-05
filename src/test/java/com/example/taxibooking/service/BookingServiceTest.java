@@ -21,12 +21,16 @@ import com.example.taxibooking.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
@@ -37,6 +41,8 @@ public class BookingServiceTest {
     private TaxiRepository taxiRepository;
     private ModelMapper modelMapper;
     private BookingService bookingService;
+    @InjectMocks
+    private TaxiService taxiService;
 
 
 
