@@ -3,23 +3,26 @@ package com.example.taxibooking.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.eq;
 //import static org.mockito.Mockito.times;
 //import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 //import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.UpdateAccountRequest;
 //import com.example.taxibooking.contract.response.SignUpResponse;
+import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.exception.EntityAlreadyExistsException;
+import com.example.taxibooking.exception.EntityNotFoundException;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.UserRepository;
 //import com.example.taxibooking.security.JwtService;
 import java.util.Optional;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -42,22 +45,26 @@ public class UserServiceTest {
    @BeforeEach
     public void setUp() throws Exception {
     MockitoAnnotations.openMocks(this);   }
-//    @Test
-//    void testSignUp(){
-//        Long id=1L;
-//        SignUpRequest request = new SignUpRequest("name","name@gmail.com","password");
-//        User user=User.builder().name(request.getName())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .build();
-//        SignUpResponse expectedResponse = new SignUpResponse(1L,"name","name@gmail.com");
-//        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
-//        when(userRepository.save(any(User.class))).thenReturn(user);
-//        when(modelMapper.map(user, SignUpResponse.class)).thenReturn(expectedResponse);
-//        SignUpResponse actualResponse = userService.signUp(request);
-//        assertEquals(expectedResponse, actualResponse);
-//
-//    }
+    @Test
+    void testSignUp() {
+    SignUpRequest request = new SignUpRequest("user", "user@example.com", "password");
+    User user = User.builder()
+            .name(request.getName())
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .accountBalance(0D)
+            .build();
+
+    SignUpResponse expectedResponse = new SignUpResponse(1L, "user", "user@example.com");
+    when(userRepository.existsByEmail(any(String.class))).thenReturn(false);
+    when(userRepository.save(any(User.class))).thenReturn(user);
+    when(modelMapper.map(any(User.class), eq(SignUpResponse.class))).thenReturn(expectedResponse);
+    SignUpResponse actualResponse = userService.signUp(request);
+    assertEquals(expectedResponse, actualResponse);
+    verify(userRepository, times(1)).save(any(User.class));
+    verify(modelMapper, times(1)).map(any(User.class), eq(SignUpResponse.class));
+    }
+
 
     @Test
     void testAddBalance() {
@@ -114,4 +121,14 @@ public class UserServiceTest {
         assertThrows(EntityAlreadyExistsException.class, () -> userService.signUp(request));
 
     }
+//    @Test
+//    void testEntityAlreadyExistsException() {
+//       String entity="User";
+//       EntityAlreadyExistsException exception =assertThrows(EntityAlreadyExistsException.class,()->{
+//           throw new EntityAlreadyExistsException(entity);
+//       });
+//       assertEquals(entity,exception.getEntity());
+//       assertEquals(entity,exception.getMessage());
+//       assertEquals(0L,exception.getId());
+//    }
 }

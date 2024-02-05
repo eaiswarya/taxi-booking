@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.request.UpdateAccountRequest;
+import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,6 +29,24 @@ public class UserControllerTest {
     @Autowired private MockMvc mockMvc;
 
     @MockBean private UserService userService;
+
+
+    @Test
+    void testUserSignup() throws Exception {
+        SignUpRequest signUpRequest = new SignUpRequest("user", "user@example.com", "password");
+        SignUpResponse expectedResponse = new SignUpResponse(1L, "user", "user@example.com");
+        when(userService.signUp(any(SignUpRequest.class))).thenReturn(expectedResponse);
+
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/user/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(new ObjectMapper().writeValueAsString(signUpRequest))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+    }
 
     @Test
     void testAddBalance() throws Exception {

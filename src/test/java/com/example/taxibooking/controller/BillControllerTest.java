@@ -3,6 +3,7 @@ package com.example.taxibooking.controller;
 import com.example.taxibooking.contract.request.BillRequest;
 
 import com.example.taxibooking.contract.response.BillResponse;
+import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.service.BillService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -43,4 +45,22 @@ public class BillControllerTest {
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
 
     }
+//    @Test
+//    void testBalanceCheck() throws Exception {
+//        Long id = 1L;
+//        Double accountBalance = 100.0;
+//        Double fare = 50.0;
+//        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L,"name","name@gmail.com",100.0);
+//
+//        when(billService.balanceCheck(id, accountBalance, fare)).thenReturn(expectedResponse);
+//        mockMvc.perform(get("/{id}", id)
+//                        .param("accountBalance", accountBalance.toString())
+//                        .param("fare", fare.toString())
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+//    }
+
+
 }

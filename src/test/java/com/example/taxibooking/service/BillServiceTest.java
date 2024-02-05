@@ -90,7 +90,16 @@ public class BillServiceTest {
         assertThrows(EntityNotFoundException.class, () -> billService.balanceCheck(id, accountBalance,fare));
 
     }
+    @Test
+    void testFindUserById_UserNotFound() {
+        Long id = 1L;
 
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-
+        assertThrows(EntityNotFoundException.class, () -> userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found")));
     }
+
+
+
+
+}

@@ -35,15 +35,20 @@ public class BookingControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean private BookingService bookingService;
 
-//    @Test
-//    void testAddBooking() throws Exception {
-//       Long id=1L;
-//       BookingRequest request = new BookingRequest("location","location2");
-//       BookingResponse expectedResponse = new BookingResponse(1L,"location1","location2",LocalDateTime.now(),100.0,Status.BOOKED);
-//       when(bookingService.addBooking(request)).thenReturn(expectedResponse);
-//
-//
-//    }
+@Test
+void testAddBooking() throws Exception {
+    BookingRequest request = new BookingRequest("location1", "location2");
+    BookingResponse expectedResponse = new BookingResponse();
+
+    when(bookingService.addBooking(any(BookingRequest.class))).thenReturn(expectedResponse);
+    mockMvc.perform(post("/booking/add")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(new ObjectMapper().writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+}
+
 
     @Test
     void testGetAllBookings() throws Exception {

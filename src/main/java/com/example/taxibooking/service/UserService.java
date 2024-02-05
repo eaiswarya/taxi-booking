@@ -10,14 +10,16 @@ import com.example.taxibooking.contract.response.UpdateAccountResponse;
 //import com.example.taxibooking.exception.EntityAlreadyExistsException;
 
 import com.example.taxibooking.exception.EntityAlreadyExistsException;
+import com.example.taxibooking.exception.EntityNotFoundException;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 //    private final JwtService jwtService;
-
+@Transactional
     public SignUpResponse signUp(SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EntityAlreadyExistsException(request.getEmail());
@@ -59,7 +61,7 @@ public class UserService {
         User user =
                 userRepository
                         .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("User with id "+id+ " not found"));
         user =
                 User.builder()
                         .id(user.getId())
@@ -74,7 +76,7 @@ public class UserService {
         User user =
                 userRepository
                         .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("User with id "+id+ " not found"));
         user =
                 User.builder()
                         .id(user.getId())
