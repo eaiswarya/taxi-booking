@@ -10,46 +10,46 @@ Entities :
 ## Endpoints
 
 ### User SignUp
-- **Endpoint:** `/user/signup`
+- **Endpoint:** ` /user/signup`
 - **Method:** POST
 
 ### User Login
-- **Endpoint:** `/user/login
+- **Endpoint:** ` /user/login`
 - **Method:** POST
 
 ### Add Balance
-- **Endpoint:** /user/addBalance
+- **Endpoint:** ` /user/addBalance `
 -  **Method:** PUT
 ### Update Balance
-- **Endpoint:** /user/updateBalance/{id}
+- **Endpoint:** ` /user/updateBalance/{id} `
 - **Method:** PUT
 ### Adding Taxi
-- **Endpoint:** /taxi/addingTaxi
+- **Endpoint:** ` /taxi/addingTaxi `
 - **Method:** POST
 
 ### Available Taxis 
-- **Endpoint:** /taxi/available
+- **Endpoint:** ` /taxi/available `
 - **Method:** GET
 ### Add Booking
-- **Endpoint:** /booking/add
+- **Endpoint:** ` /booking/add `
 - **Method:** POST
 ### Get All Booking
-- **Endpoint:** /booking/details
+- **Endpoint:** ` /booking/details `
 - **Method:** GET
 ### Get Booking by its ID
-- **Endpoint:** /booking/details/{id}
+- **Endpoint:** ` /booking/details/{id} `
 - **Method:** GET
 ### Cancel Booking
-- **Endpoint:** /booking/cancel/{bookingId}
+- **Endpoint:** ` /booking/cancel/{bookingId} `
 - **Method:** POST
 ### Get Nearest Taxi
-- **Endpoint:** /booking/nearestTaxi
+- **Endpoint:** ` /booking/nearestTaxi `
 - **Method:** GET
 ### Calculate Fare
-- **Endpoint:** /taxi-booking/fare
+- **Endpoint:** ` /taxi-booking/fare `
 - **Method:** POST
 ### Balance check
-- **Endpoint:** /taxi-booking/{id}
+- **Endpoint:**`  /taxi-booking/{id} `
 - **Method:** GET
 
 ## Prerequisites:
