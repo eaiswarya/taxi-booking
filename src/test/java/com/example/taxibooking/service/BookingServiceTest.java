@@ -92,7 +92,6 @@ public class BookingServiceTest {
                         "location1",
                         "location2",
                         LocalDateTime.now().toString(),
-                        100.0,
                         Status.BOOKED);
         Booking booking = new Booking();
         when(modelMapper.map(bookingRequest, Booking.class)).thenReturn(booking);
@@ -130,7 +129,6 @@ public class BookingServiceTest {
                         "location",
                         "location2",
                         LocalDateTime.now().toString(),
-                        100.0,
                         Status.BOOKED);
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> bookingService.getBooking(id));

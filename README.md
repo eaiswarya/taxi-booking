@@ -23,6 +23,7 @@ Entities :
 ### Update Balance
 - **Endpoint:** ` /user/updateBalance/{id} `
 - **Method:** PUT
+
 ### Adding Taxi
 - **Endpoint:** ` /taxi/addingTaxi `
 - **Method:** POST
@@ -30,6 +31,7 @@ Entities :
 ### Available Taxis 
 - **Endpoint:** ` /taxi/available `
 - **Method:** GET
+
 ### Add Booking
 - **Endpoint:** ` /booking/add `
 - **Method:** POST

@@ -41,7 +41,6 @@ public class BookingControllerTest {
                         "Tirur",
                         "Chamravattam",
                         "2024-02-03 10:18:28.012173",
-                        80.0,
                         Status.BOOKED);
 
         when(bookingService.addBooking(any(BookingRequest.class))).thenReturn(expectedResponse);

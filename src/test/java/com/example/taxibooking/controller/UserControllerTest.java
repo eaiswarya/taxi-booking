@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
     @Autowired private MockMvc mockMvc;
 
@@ -65,11 +65,11 @@ public class UserControllerTest {
         Long id = 1L;
         Double accountBalance = 100.0;
         UpdateAccountResponse expectedResponse =
-                new UpdateAccountResponse(1L, "name", "name@gmail.com", 100.0);
+                new UpdateAccountResponse(1L, "name", 100.0);
         when(userService.addBalance(any(Long.class), any(Double.class)))
                 .thenReturn(expectedResponse);
         mockMvc.perform(
-                        put("/user/" + id + "/balance")
+                        put("/user/" + id + "/addBalance")
                                 .param("accountBalance", accountBalance.toString())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -82,7 +82,7 @@ public class UserControllerTest {
         Long id = 1L;
         UpdateAccountRequest request = new UpdateAccountRequest(100.0);
         UpdateAccountResponse expectedResponse =
-                new UpdateAccountResponse(1L, "name", "name@gmail.com", 100.0);
+                new UpdateAccountResponse(1L, "name", 100.0);
         when(userService.updateBalance(any(Long.class), any(UpdateAccountRequest.class)))
                 .thenReturn(expectedResponse);
 
