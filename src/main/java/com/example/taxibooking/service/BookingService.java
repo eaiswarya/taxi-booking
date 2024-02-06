@@ -6,7 +6,6 @@ import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.Taxi;
-import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
 import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
@@ -69,11 +68,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<TaxiResponse> searchTaxi(Long id, String pickupLocation) {
-        User user =
-                userRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public List<TaxiResponse> searchTaxi(String pickupLocation) {
         List<Taxi> allTaxies = taxiRepository.findAll();
         List<Taxi> availableTaxies = new ArrayList<>();
         for (Taxi taxies : allTaxies) {

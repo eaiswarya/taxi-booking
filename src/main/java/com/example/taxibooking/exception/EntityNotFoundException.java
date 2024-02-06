@@ -1,8 +1,9 @@
 package com.example.taxibooking.exception;
 
-import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class EntityNotFoundException extends RuntimeException {
     private final String entity;
     private final Long id;
@@ -14,7 +15,7 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public EntityNotFoundException(String entity, Long id) {
-        super("User with id " + id + " not found");
+        super(entity + " with id " + id + " not found");
         this.entity = entity;
         this.id = id;
     }

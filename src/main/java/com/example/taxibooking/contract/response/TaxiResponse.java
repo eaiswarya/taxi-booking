@@ -1,7 +1,6 @@
 package com.example.taxibooking.contract.response;
 
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

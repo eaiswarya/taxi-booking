@@ -11,13 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
-import com.example.taxibooking.contract.request.SignUpRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.SignUpResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,25 +27,32 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class BookingControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean private BookingService bookingService;
 
-@Test
-void testAddBooking() throws Exception {
-    BookingRequest request = new BookingRequest("location1", "location2");
-    BookingResponse expectedResponse = new BookingResponse();
+    @Test
+    void testAddBooking() throws Exception {
+        BookingRequest bookingRequest = new BookingRequest("Tirur", "Chamravattam");
+        BookingResponse expectedResponse =
+                new BookingResponse(
+                        1L,
+                        "Tirur",
+                        "Chamravattam",
+                        "2024-02-03 10:18:28.012173",
+                        80.0,
+                        Status.BOOKED);
 
-    when(bookingService.addBooking(any(BookingRequest.class))).thenReturn(expectedResponse);
-    mockMvc.perform(post("/booking/add")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(new ObjectMapper().writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
-}
+        when(bookingService.addBooking(any(BookingRequest.class))).thenReturn(expectedResponse);
 
+        mockMvc.perform(
+                        post("/booking/add")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(new ObjectMapper().writeValueAsString(bookingRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+    }
 
     @Test
     void testGetAllBookings() throws Exception {
@@ -94,18 +98,11 @@ void testAddBooking() throws Exception {
         String pickupLocation = "Location1";
         List<TaxiResponse> expectedResponse = new ArrayList<>();
 
-        when(bookingService.searchTaxi(any(Long.class), any(String.class)))
-                .thenReturn(expectedResponse);
+        when(bookingService.searchTaxi(any(String.class))).thenReturn(expectedResponse);
 
-        mockMvc.perform(
-                        get("/booking/nearestTaxi")
-                                .param("userId", id.toString())
-                                .param("pickupLocation", pickupLocation))
+        mockMvc.perform(get("/booking/nearestTaxi").param("pickupLocation", pickupLocation))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
     }
-
-
-
 }

@@ -7,34 +7,59 @@ Entities :
 - Taxi
 - User
 
-
 ## Endpoints
 
-1. @PostMapping("/signup")
-2. @PostMapping("/login")
-3. @PutMapping("{id}/balance")
-4. @PutMapping("updateBalance/{id}")
-5.  @PostMapping("/addingTaxi")
-6. @GetMapping("/available")
-7. @PostMapping("/add")
-8. @GetMapping("/details")
-9. @GetMapping("/details/{id}")
-10. @PostMapping("/cancel/{bookingId}")
-11. @GetMapping("/nearestTaxi")
-12. @PostMapping("/fare/{userId}")
+### User SignUp
+- **Endpoint:** `/user/signup`
+- **Method:** POST
 
+### User Login
+- **Endpoint:** `/user/login
+- **Method:** POST
 
+### Add Balance
+- **Endpoint:** /user/addBalance
+-  **Method:** PUT
+### Update Balance
+- **Endpoint:** /user/updateBalance/{id}
+- **Method:** PUT
+### Adding Taxi
+- **Endpoint:** /taxi/addingTaxi
+- **Method:** POST
 
+### Available Taxis 
+- **Endpoint:** /taxi/available
+- **Method:** GET
+### Add Booking
+- **Endpoint:** /booking/add
+- **Method:** POST
+### Get All Booking
+- **Endpoint:** /booking/details
+- **Method:** GET
+### Get Booking by its ID
+- **Endpoint:** /booking/details/{id}
+- **Method:** GET
+### Cancel Booking
+- **Endpoint:** /booking/cancel/{bookingId}
+- **Method:** POST
+### Get Nearest Taxi
+- **Endpoint:** /booking/nearestTaxi
+- **Method:** GET
+### Calculate Fare
+- **Endpoint:** /taxi-booking/fare
+- **Method:** POST
+### Balance check
+- **Endpoint:** /taxi-booking/{id}
+- **Method:** GET
 
-### Prerequisites:
-
-- JDK 17
+## Prerequisites:
+- Java Development Kit (JDK) 17
 - Maven
+- PostgresQl
 - Other dependencies
-- GitHub
-- Lombok
 
-## Testing
+
+## Testing:
 
 To test the APIs, you can use any API testing tool  Postman. Make sure your server is running, and then send HTTP requests to the API endpoints.
 

@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/taxi-booking")
 @RequiredArgsConstructor
 public class BillController {
-    @Autowired
-    private final BillService billService;
+    @Autowired private final BillService billService;
 
     @PostMapping("/fare")
     public @ResponseBody BillResponse calculateFare(@RequestBody BillRequest request) {

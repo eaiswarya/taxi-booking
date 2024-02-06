@@ -45,8 +45,7 @@ public class BookingController {
     }
 
     @GetMapping("/nearestTaxi")
-    public List<TaxiResponse> searchTaxi(
-            @RequestParam Long userId, @RequestParam String pickupLocation) {
-        return bookingService.searchTaxi(userId, pickupLocation);
+    public List<TaxiResponse> searchTaxi(@RequestParam String pickupLocation) {
+        return bookingService.searchTaxi(pickupLocation);
     }
 }
