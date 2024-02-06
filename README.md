@@ -28,7 +28,7 @@ Entities :
 - **Endpoint:** ` /taxi/addingTaxi `
 - **Method:** POST
 
-### Available Taxis 
+### Available Taxis
 - **Endpoint:** ` /taxi/available `
 - **Method:** GET
 

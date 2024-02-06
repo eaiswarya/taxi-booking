@@ -63,8 +63,7 @@ public class BillServiceTest {
                         .email("testuser@example.com")
                         .accountBalance(200.0)
                         .build();
-        UpdateAccountResponse expectedResponse =
-                new UpdateAccountResponse(id, "Test User", "testuser@example.com", 100.0);
+        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(id, "Test User", 100.0);
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);

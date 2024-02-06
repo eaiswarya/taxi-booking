@@ -125,11 +125,7 @@ public class BookingServiceTest {
         Long id = 1L;
         BookingResponse request =
                 new BookingResponse(
-                        1L,
-                        "location",
-                        "location2",
-                        LocalDateTime.now().toString(),
-                        Status.BOOKED);
+                        1L, "location", "location2", LocalDateTime.now().toString(), Status.BOOKED);
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> bookingService.getBooking(id));
     }

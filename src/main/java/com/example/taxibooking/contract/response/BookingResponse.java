@@ -13,6 +13,6 @@ public class BookingResponse {
     private String pickupLocation;
     private String dropoutLocation;
     private String bookingTime;
-//    private Double fare;
+    //    private Double fare;
     private Status status;
 }

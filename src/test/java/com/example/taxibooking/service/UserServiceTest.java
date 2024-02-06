@@ -84,8 +84,7 @@ public class UserServiceTest {
         Long id = 1L;
         Double accountBalance = 100.0;
         User user = User.builder().id(id).name("name").accountBalance(accountBalance).build();
-        UpdateAccountResponse expectedResponse =
-                new UpdateAccountResponse(1L, "name", "name@gmail.com", 100.0);
+        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L, "name", 100.0);
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(modelMapper.map(user, UpdateAccountResponse.class)).thenReturn(expectedResponse);
@@ -104,8 +103,7 @@ public class UserServiceTest {
                         .email("user@example.com")
                         .accountBalance(200.0)
                         .build();
-        UpdateAccountResponse expectedResponse =
-                new UpdateAccountResponse(id, "name", "name@gmail.com", 100.0);
+        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(id, "name", 100.0);
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(modelMapper.map(user, UpdateAccountResponse.class)).thenReturn(expectedResponse);
