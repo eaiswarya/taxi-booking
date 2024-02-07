@@ -1,9 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/taxi
-    username: postgres
-    password: Aish@123
-
+    username: { username }
+    password: {password}
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
