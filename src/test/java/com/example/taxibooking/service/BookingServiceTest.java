@@ -47,7 +47,7 @@ public class BookingServiceTest {
         modelMapper = mock(ModelMapper.class);
 
         bookingService =
-                new BookingService(bookingRepository, userRepository, taxiRepository, modelMapper);
+                new BookingService(bookingRepository, userRepository,taxiRepository, modelMapper);
     }
 
     @Test
