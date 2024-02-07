@@ -32,7 +32,7 @@ public class BillService {
                 userRepository
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("user not found"));
-        Double updatedBalance = user.getAccountBalance() + - fare;
+        Double updatedBalance = user.getAccountBalance()  - fare;
         if (updatedBalance < 0) {
             throw new InsufficientBalanceException("Insufficient balance");
         }
