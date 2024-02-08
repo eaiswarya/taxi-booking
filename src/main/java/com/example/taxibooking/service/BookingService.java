@@ -3,18 +3,18 @@ package com.example.taxibooking.service;
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.TaxiResponse;
+import com.example.taxibooking.exception.BookingNotFoundException;
+import com.example.taxibooking.exception.CancellationFailedException;
 import com.example.taxibooking.exception.InsufficientBalanceException;
 import com.example.taxibooking.model.Booking;
-import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
 import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -78,34 +78,16 @@ public class BookingService {
         return modelMapper.map(booking, BookingResponse.class);
     }
 
-    public void cancelBooking(Long id) {
-        Booking booking =
-                bookingRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
-
-        if (booking.getStatus() == Status.CANCELLED) {
-            throw new IllegalStateException("Booking is already canceled");
+    public String cancelBooking(Long id) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(id);
+        if (optionalBooking.isEmpty()) {
+            throw new BookingNotFoundException("Booking Not Found");
         }
-
-        booking.setStatus(Status.CANCELLED);
-        bookingRepository.save(booking);
-    }
-
-    public List<TaxiResponse> searchTaxi(String pickupLocation) {
-        List<Taxi> allTaxies = taxiRepository.findAll();
-        List<Taxi> availableTaxies = new ArrayList<>();
-        for (Taxi taxies : allTaxies) {
-            if (taxies.getCurrentLocation().equals(pickupLocation)) {
-                availableTaxies.add(taxies);
-            }
-        }
-        if (availableTaxies.isEmpty()) {
-            throw new EntityNotFoundException("Not available");
+        bookingRepository.deleteById(id);
+        if (bookingRepository.existsById(id)) {
+            throw new CancellationFailedException("Cancellation Failure");
         } else {
-            return availableTaxies.stream()
-                    .map(taxi -> modelMapper.map(taxi, TaxiResponse.class))
-                    .collect(Collectors.toList());
+            return "Successfully cancelled";
         }
     }
 }

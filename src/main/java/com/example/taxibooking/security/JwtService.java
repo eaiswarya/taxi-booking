@@ -12,18 +12,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    private static final String SECRET_KEY = System.getenv("SECRET_KEY");
 
-    @Value("${jwt.expiry}")
-    private Integer expirationTime;
+    public static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 24;
 
     public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -33,13 +30,13 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

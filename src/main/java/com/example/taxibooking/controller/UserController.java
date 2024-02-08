@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,12 +32,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
-    }
-
-    @PutMapping("{id}/addBalance")
-    public UpdateAccountResponse addBalance(
-            @PathVariable Long id, @RequestParam Double accountBalance) {
-        return userService.addBalance(id, accountBalance);
     }
 
     @PutMapping("updateBalance/{id}")

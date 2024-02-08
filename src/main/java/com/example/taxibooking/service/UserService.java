@@ -55,24 +55,6 @@ public class UserService {
         return LoginResponse.builder().token(jwtToken).build();
     }
 
-    public UpdateAccountResponse addBalance(Long id, Double accountBalance) {
-        User user =
-                userRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () ->
-                                        new EntityNotFoundException(
-                                                "User with id " + id + " not found"));
-        user =
-                User.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .accountBalance(accountBalance)
-                        .build();
-        user = userRepository.save(user);
-        return modelMapper.map(user, UpdateAccountResponse.class);
-    }
-
     public UpdateAccountResponse updateBalance(Long id, UpdateAccountRequest request) {
         User user =
                 userRepository

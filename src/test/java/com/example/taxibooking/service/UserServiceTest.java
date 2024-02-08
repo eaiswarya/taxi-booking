@@ -80,19 +80,6 @@ public class UserServiceTest {
     }
 
     @Test
-    void testAddBalance() {
-        Long id = 1L;
-        Double accountBalance = 100.0;
-        User user = User.builder().id(id).name("name").accountBalance(accountBalance).build();
-        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L, "name", 100.0);
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(modelMapper.map(user, UpdateAccountResponse.class)).thenReturn(expectedResponse);
-        UpdateAccountResponse actualResponse = userService.addBalance(id, accountBalance);
-        assertEquals(expectedResponse, actualResponse);
-    }
-
-    @Test
     void testUpdateBalance() {
         Long id = 1L;
         UpdateAccountRequest request = new UpdateAccountRequest(100.0);
@@ -109,15 +96,6 @@ public class UserServiceTest {
         when(modelMapper.map(user, UpdateAccountResponse.class)).thenReturn(expectedResponse);
         UpdateAccountResponse actualResponse = userService.updateBalance(id, request);
         assertEquals(expectedResponse, actualResponse);
-    }
-
-    @Test
-    void testAddBalance_UserNotFound() {
-        Long id = 1L;
-        Double accountBalance = 100.0;
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(
-                EntityNotFoundException.class, () -> userService.addBalance(id, accountBalance));
     }
 
     @Test

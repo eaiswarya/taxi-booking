@@ -1,22 +1,17 @@
 package com.example.taxibooking.controller;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -36,31 +31,37 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @AutoConfigureMockMvc(addFilters = false)
 public class BookingControllerTest {
     @Autowired private MockMvc mockMvc;
-    @Autowired
-    private BookingController bookingController;
+    @Autowired private BookingController bookingController;
     @MockBean private BookingService bookingService;
-
-
 
     @Test
     void testAddBooking() throws Exception {
-        when(bookingService.addBooking(Mockito.<Long>any(), anyDouble(), Mockito.<BookingRequest>any()))
+        when(bookingService.addBooking(
+                        Mockito.<Long>any(), anyDouble(), Mockito.<BookingRequest>any()))
                 .thenReturn(new BookingResponse());
-        MockHttpServletRequestBuilder postResult = MockMvcRequestBuilders.post("/booking/addBooking/{userId}", 1L);
-        MockHttpServletRequestBuilder contentTypeResult = postResult.param("distance", String.valueOf(10.0d))
-                .contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder postResult =
+                MockMvcRequestBuilders.post("/booking/addBooking/{userId}", 1L);
+        MockHttpServletRequestBuilder contentTypeResult =
+                postResult
+                        .param("distance", String.valueOf(10.0d))
+                        .contentType(MediaType.APPLICATION_JSON);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        MockHttpServletRequestBuilder requestBuilder = contentTypeResult
-                .content(objectMapper.writeValueAsString(new BookingRequest("Pickup Location", "Dropout Location")));
+        MockHttpServletRequestBuilder requestBuilder =
+                contentTypeResult.content(
+                        objectMapper.writeValueAsString(
+                                new BookingRequest("Pickup Location", "Dropout Location")));
         MockMvcBuilders.standaloneSetup(bookingController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("{\"id\":null,\"pickupLocation\":null,\"dropoutLocation\":null,\"fare\":null,\"status\":null}"));
+                .andExpect(
+                        MockMvcResultMatchers.content()
+                                .string(
+                                        "{\"id\":null,\"pickupLocation\":null,\"dropoutLocation\":null,\"fare\":null,\"status\":null}"));
     }
+
     @Test
     void testGetAllBookings() throws Exception {
         List<BookingResponse> responses = Arrays.asList(new BookingResponse());
@@ -89,27 +90,14 @@ public class BookingControllerTest {
     @Test
     void testCancelBooking() throws Exception {
         Long id = 1L;
-        String expectedResponse = "Booking cancelled successfully";
+        String cancelResponse = "Booking cancelled successfully";
 
-        doNothing().when(bookingService).cancelBooking(any(Long.class));
+        when(bookingService.cancelBooking(anyLong())).thenReturn(cancelResponse);
 
-        mockMvc.perform(post("/booking/cancel/" + id))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(expectedResponse));
-    }
-
-    @Test
-    void testSearchTaxi() throws Exception {
-        Long id = 1L;
-        String pickupLocation = "Location1";
-        List<TaxiResponse> expectedResponse = new ArrayList<>();
-
-        when(bookingService.searchTaxi(any(String.class))).thenReturn(expectedResponse);
-
-        mockMvc.perform(get("/booking/nearestTaxi").param("pickupLocation", pickupLocation))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/booking/cancel/" + id)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(cancelResponse));
     }
 }

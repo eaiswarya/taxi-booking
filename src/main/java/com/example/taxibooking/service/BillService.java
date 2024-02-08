@@ -15,13 +15,12 @@ public class BillService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-
     public UpdateAccountResponse balanceCheck(Long id, Double accountBalance, Double fare) {
         User user =
                 userRepository
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("user not found"));
-        Double updatedBalance = user.getAccountBalance()  - fare;
+        Double updatedBalance = user.getAccountBalance() - fare;
         if (updatedBalance < 0) {
             throw new InsufficientBalanceException("Insufficient balance");
         }

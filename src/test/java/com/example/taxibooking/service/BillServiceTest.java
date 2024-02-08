@@ -29,9 +29,8 @@ public class BillServiceTest {
         userRepository = mock(UserRepository.class);
         modelMapper = mock(ModelMapper.class);
 
-        billService = new BillService( userRepository, modelMapper);
+        billService = new BillService(userRepository, modelMapper);
     }
-
 
     @Test
     void testBalanceCheck() {
@@ -79,7 +78,6 @@ public class BillServiceTest {
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);
     }
-
 
     @Test
     void testFindUserById_UserNotFound() {

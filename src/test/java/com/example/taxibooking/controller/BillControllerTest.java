@@ -1,5 +1,11 @@
 package com.example.taxibooking.controller;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.service.BillService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,17 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 public class BillControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean private BillService billService;
+
     @Test
     public void testBalanceAmount() throws Exception {
         Long id = 1L;
@@ -38,5 +39,4 @@ public class BillControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
     }
-
 }

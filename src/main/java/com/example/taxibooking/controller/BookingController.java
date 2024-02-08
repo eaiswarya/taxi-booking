@@ -2,11 +2,9 @@ package com.example.taxibooking.controller;
 
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,14 +41,9 @@ public class BookingController {
         return bookingService.getBooking(id);
     }
 
-    @PostMapping("/cancel/{bookingId}")
-    public ResponseEntity<String> cancelBooking(@PathVariable Long bookingId) {
-        bookingService.cancelBooking(bookingId);
-        return ResponseEntity.ok("Booking cancelled successfully");
-    }
-
-    @GetMapping("/nearestTaxi")
-    public List<TaxiResponse> searchTaxi(@RequestParam String pickupLocation) {
-        return bookingService.searchTaxi(pickupLocation);
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long id) {
+        String cancelResponse = bookingService.cancelBooking(id);
+        return ResponseEntity.ok(cancelResponse);
     }
 }

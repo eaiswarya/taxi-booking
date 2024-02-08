@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -12,7 +13,7 @@ import static org.mockito.Mockito.when;
 import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
-import com.example.taxibooking.contract.response.TaxiResponse;
+import com.example.taxibooking.exception.BookingNotFoundException;
 import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.model.User;
@@ -20,12 +21,10 @@ import com.example.taxibooking.repository.BookingRepository;
 import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -59,18 +58,19 @@ public class BookingServiceTest {
         BookingRequest request = new BookingRequest("location1", "location2");
         User user = new User(1L, "Name", "name@email.com", "password", 100.0);
         Taxi taxi = new Taxi(1L, "Name", "ABC123", "location1");
-        Booking booking = new Booking(1L,null,null,100.0 ,null,10.0,Status.BOOKED,user,taxi);
-        BookingResponse expectedResponse = new BookingResponse(1L,"location","location2",null, Status.BOOKED);
+        Booking booking = new Booking(1L, null, null, 100.0, null, 10.0, Status.BOOKED, user, taxi);
+        BookingResponse expectedResponse =
+                new BookingResponse(1L, "location", "location2", null, Status.BOOKED);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(modelMapper.map(any(Booking.class), eq(BookingResponse.class))).thenReturn(expectedResponse);
+        when(modelMapper.map(any(Booking.class), eq(BookingResponse.class)))
+                .thenReturn(expectedResponse);
 
         BookingResponse actualResponse = bookingService.addBooking(userId, distance, request);
 
         assertEquals(expectedResponse, actualResponse);
-
     }
 
     @Test
@@ -83,10 +83,11 @@ public class BookingServiceTest {
         assertEquals(bookingsResponse, actualResponse);
         verify(bookingRepository).findAll();
     }
+
     @Test
     void testGetBooking() {
         Long id = 1L;
-        Booking booking = new Booking(1L,"JD","JDSJ",100.0,null,50.0,null,null,null);
+        Booking booking = new Booking(1L, "JD", "JDSJ", 100.0, null, 50.0, null, null, null);
         BookingResponse expectedResponse = modelMapper.map(booking, BookingResponse.class);
 
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
@@ -98,32 +99,42 @@ public class BookingServiceTest {
         assertEquals(expectedResponse, actualResponse);
     }
 
+    @Test
+    public void testCancelBooking() {
+        Long id = 1L;
+        Booking booking =
+                Booking.builder()
+                        .id(1L)
+                        .pickupLocation("Pala")
+                        .dropoutLocation("Kollam")
+                        .bookingTime(LocalDateTime.now())
+                        .status(Status.BOOKED)
+                        .build();
+        when(bookingRepository.findById(id)).thenReturn(Optional.of(booking));
+        doNothing().when(bookingRepository).deleteById(id);
+        when(bookingRepository.existsById(id)).thenReturn(false);
+        String actualResult = bookingService.cancelBooking(id);
+        assertEquals("Successfully cancelled", actualResult);
+    }
 
     @Test
-    void testSearchTaxi() {
-        Taxi taxi1 = new Taxi(1L, "sharok", "KL 03 5678", "cvm");
-        Taxi taxi2 = new Taxi(1L, "midhun", "KL 05 7465", "cvm");
+    public void testUpdateBooking_BookingNotFound() {
+        Long id = 1L;
 
-        List<Taxi> availableTaxies = Arrays.asList(taxi1, taxi2);
-        when(taxiRepository.findAll()).thenReturn(Collections.emptyList());
-        assertThrows(EntityNotFoundException.class, () -> bookingService.searchTaxi("cvm"));
-        when(taxiRepository.findAll()).thenReturn(availableTaxies);
+        when(bookingRepository.findById(id)).thenReturn(Optional.empty());
 
-        List<TaxiResponse> expectedResponse =
-                availableTaxies.stream()
-                        .map(taxi -> modelMapper.map(taxi, TaxiResponse.class))
-                        .collect(Collectors.toList());
-
-        List<TaxiResponse> actualResponse = bookingService.searchTaxi("cvm");
-        assertEquals(expectedResponse, actualResponse);
+        assertThrows(
+                BookingNotFoundException.class,
+                () -> {
+                    bookingService.cancelBooking(id);
+                });
     }
 
     @Test
     void testGetBooking_UserNotFound() {
         Long id = 1L;
         BookingResponse request =
-                new BookingResponse(
-                        1L, "location", "location2",null, Status.BOOKED);
+                new BookingResponse(1L, "location", "location2", null, Status.BOOKED);
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> bookingService.getBooking(id));
     }
@@ -132,7 +143,7 @@ public class BookingServiceTest {
     void testCancelBookingNotFound() {
         Long id = 1L;
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> bookingService.cancelBooking(id));
+        assertThrows(BookingNotFoundException.class, () -> bookingService.cancelBooking(id));
         verify(bookingRepository, never()).save(any());
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BillController {
     @Autowired private final BillService billService;
 
-
     @GetMapping("/{id}")
     public @ResponseBody UpdateAccountResponse balanceCheck(
             @PathVariable Long id, @RequestParam Double accountBalance, @RequestParam Double fare) {
