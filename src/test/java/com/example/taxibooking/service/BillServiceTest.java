@@ -7,13 +7,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.example.taxibooking.contract.request.BillRequest;
-import com.example.taxibooking.contract.response.BillResponse;
 import com.example.taxibooking.contract.response.UpdateAccountResponse;
 import com.example.taxibooking.exception.InsufficientBalanceException;
-import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.User;
-import com.example.taxibooking.repository.BookingRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -23,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 public class BillServiceTest {
-    private BookingRepository bookRepository;
     private UserRepository userRepository;
     private ModelMapper modelMapper;
     private BillService billService;
@@ -31,25 +26,12 @@ public class BillServiceTest {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        bookRepository = mock(BookingRepository.class);
         userRepository = mock(UserRepository.class);
         modelMapper = mock(ModelMapper.class);
 
-        billService = new BillService(bookRepository, userRepository, modelMapper);
+        billService = new BillService( userRepository, modelMapper);
     }
 
-    @Test
-    void testCalculateFare() {
-        BillRequest request = new BillRequest(10D);
-        Double minimumCharge = 50.0;
-
-        Booking booking = Booking.builder().fare(request.getDistance() * minimumCharge).build();
-
-        BillResponse expectedResponse = modelMapper.map(booking, BillResponse.class);
-        when(bookRepository.save(any(Booking.class))).thenReturn(booking);
-        BillResponse actualResponse = billService.calculateFare(request);
-        assertEquals(expectedResponse, actualResponse);
-    }
 
     @Test
     void testBalanceCheck() {
@@ -98,16 +80,6 @@ public class BillServiceTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
-    @Test
-    void testBalanceCheck_UserNotFound() {
-        Long id = 1L;
-        Double accountBalance = 100.0;
-        Double fare = 100.0;
-        when(bookRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(
-                EntityNotFoundException.class,
-                () -> billService.balanceCheck(id, accountBalance, fare));
-    }
 
     @Test
     void testFindUserById_UserNotFound() {

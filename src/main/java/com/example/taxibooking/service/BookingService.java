@@ -4,8 +4,10 @@ import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
+import com.example.taxibooking.exception.InsufficientBalanceException;
 import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.Taxi;
+import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
 import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
@@ -27,15 +29,37 @@ public class BookingService {
     private final TaxiRepository taxiRepository;
     private final ModelMapper modelMapper;
 
-    public BookingResponse addBooking(BookingRequest request) {
+    public BookingResponse addBooking(Long userId, double distance, BookingRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+
+        double minimumCharge = 12.00;
+        double fare = distance * minimumCharge;
+
+        if (fare > user.getAccountBalance()) {
+            throw new InsufficientBalanceException("Insufficient Balance");
+        }
+
         Booking booking =
                 Booking.builder()
                         .pickupLocation(request.getPickupLocation())
                         .dropoutLocation(request.getDropoutLocation())
-                        .bookingTime(LocalDateTime.parse(LocalDateTime.now().toString()))
+                        .bookingTime(LocalDateTime.now())
+                        .fare(fare)
                         .status(Status.BOOKED)
                         .build();
-        booking = bookingRepository.save(booking);
+
+        User updatedUser =
+                User.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .accountBalance(user.getAccountBalance() - booking.getFare())
+                        .build();
+
+        userRepository.save(updatedUser);
+        bookingRepository.save(booking);
+
         return modelMapper.map(booking, BookingResponse.class);
     }
 

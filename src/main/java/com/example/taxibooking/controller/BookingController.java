@@ -5,6 +5,8 @@ import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +25,12 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    @PostMapping("/add")
-    public @ResponseBody BookingResponse addBooking(@RequestBody BookingRequest request) {
-        return bookingService.addBooking(request);
+    @PostMapping("/addBooking/{userId}")
+    public @ResponseBody BookingResponse addBooking(
+            @Valid @PathVariable Long userId,
+            @RequestParam double distance,
+            @RequestBody BookingRequest request) {
+        return bookingService.addBooking(userId, distance, request);
     }
 
     @GetMapping("/details")

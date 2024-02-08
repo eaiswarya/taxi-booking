@@ -1,6 +1,7 @@
 package com.example.taxibooking.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,46 +10,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.service.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 public class BookingControllerTest {
     @Autowired private MockMvc mockMvc;
+    @Autowired
+    private BookingController bookingController;
     @MockBean private BookingService bookingService;
+
+
 
     @Test
     void testAddBooking() throws Exception {
-        BookingRequest bookingRequest = new BookingRequest("Tirur", "Chamravattam");
-        BookingResponse expectedResponse =
-                new BookingResponse(
-                        1L, "Tirur", "Chamravattam", "2024-02-03 10:18:28.012173", Status.BOOKED);
+        when(bookingService.addBooking(Mockito.<Long>any(), anyDouble(), Mockito.<BookingRequest>any()))
+                .thenReturn(new BookingResponse());
+        MockHttpServletRequestBuilder postResult = MockMvcRequestBuilders.post("/booking/addBooking/{userId}", 1L);
+        MockHttpServletRequestBuilder contentTypeResult = postResult.param("distance", String.valueOf(10.0d))
+                .contentType(MediaType.APPLICATION_JSON);
 
-        when(bookingService.addBooking(any(BookingRequest.class))).thenReturn(expectedResponse);
-
-        mockMvc.perform(
-                        post("/booking/add")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(new ObjectMapper().writeValueAsString(bookingRequest)))
-                .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+        ObjectMapper objectMapper = new ObjectMapper();
+        MockHttpServletRequestBuilder requestBuilder = contentTypeResult
+                .content(objectMapper.writeValueAsString(new BookingRequest("Pickup Location", "Dropout Location")));
+        MockMvcBuilders.standaloneSetup(bookingController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("{\"id\":null,\"pickupLocation\":null,\"dropoutLocation\":null,\"fare\":null,\"status\":null}"));
     }
-
     @Test
     void testGetAllBookings() throws Exception {
         List<BookingResponse> responses = Arrays.asList(new BookingResponse());
