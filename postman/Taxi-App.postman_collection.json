@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"anu1\",\r\n    \"email\":\"anu1@gmail.com\",\r\n    \"password\":\"anu@123\"\r\n}",
+					"raw": "{\r\n    \"name\":\"dev\",\r\n    \"email\":\"devu@gmail.com\",\r\n    \"password\":\"devu@123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,11 +38,21 @@
 		{
 			"name": "addBooking",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n    \"pickupLocation\": \"sulthan bathery\",\r\n    \"dropoutLocation\":\"kalpetta\"\r\n}",
+					"raw": "{\r\n    \"pickupLocation\":\"chamravattam\",\r\n    \"dropoutLocation\":\"tirur\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,7 +60,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/booking/add",
+					"raw": "http://localhost:8082/booking/addBooking/1?distance=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -58,7 +68,14 @@
 					"port": "8082",
 					"path": [
 						"booking",
-						"add"
+						"addBooking",
+						"1"
+					],
+					"query": [
+						{
+							"key": "distance",
+							"value": "10"
+						}
 					]
 				}
 			},
@@ -67,6 +84,16 @@
 		{
 			"name": "bookings",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -87,10 +114,29 @@
 		{
 			"name": "cancel",
 			"request": {
-				"method": "PUT",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8082/booking/cancel/2?userId=1",
+					"raw": "http://localhost:8082/booking/cancel/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -99,13 +145,7 @@
 					"path": [
 						"booking",
 						"cancel",
-						"2"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "1"
-						}
+						"1"
 					]
 				}
 			},
@@ -118,7 +158,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"amal@gmail.com\",\r\n    \"password\":\"Amal@123\"\r\n}",
+					"raw": "{\r\n    \"email\":\"devu@gmail.com\",\r\n    \"password\":\"devu@123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,85 +181,23 @@
 			"response": []
 		},
 		{
-			"name": "fare",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"pickupLocation\":\"kalpetta\",\r\n    \"dropoutLocation\":\"sulthan bathery\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/booking/fare/1?distance=3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"booking",
-						"fare",
-						"1"
-					],
-					"query": [
-						{
-							"key": "distance",
-							"value": "3"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "accountBalance",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8082/user/1/balance?accountBalance=1000",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"user",
-						"1",
-						"balance"
-					],
-					"query": [
-						{
-							"key": "accountBalance",
-							"value": "1000"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "AddTaxi",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"driverName\":\"Anil Kumar\",\r\n   \"licenseNumber\":\"ksu76sd\",\r\n    \"currentLocation\":\"purathur\"\r\n}",
+					"raw": "{\r\n   \"driverName\":\"Ali\",\r\n   \"licenseNumber\":\"kl 54 u 3486\",\r\n    \"currentLocation\":\"tirur\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -244,32 +222,152 @@
 		{
 			"name": "availableTaxis",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/taxi/available?pickupLocation=tirur",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"taxi",
+						"available"
+					],
+					"query": [
+						{
+							"key": "pickupLocation",
+							"value": "tirur"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "getById",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "NearTaxi",
-			"request": {
-				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/booking/details/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"booking",
+						"details",
+						"2"
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "updateBalance",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountBalance\":1500.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/user/updateBalance/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"user",
+						"updateBalance",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "balanceCheck",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/taxi-booking/2?accountBalance=1700&fare=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"taxi-booking",
+						"2"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "accountBalance",
+							"value": "1700"
+						},
+						{
+							"key": "fare",
+							"value": "100"
+						}
+					]
+				}
 			},
 			"response": []
 		}
