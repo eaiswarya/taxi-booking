@@ -1,11 +1,10 @@
 package com.example.taxibooking.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,11 +13,11 @@ import com.example.taxibooking.constant.Status;
 import com.example.taxibooking.contract.request.BookingRequest;
 import com.example.taxibooking.contract.response.BookingResponse;
 import com.example.taxibooking.exception.BookingNotFoundException;
+import com.example.taxibooking.exception.EntityAlreadyExistsException;
 import com.example.taxibooking.model.Booking;
 import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
-import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -27,50 +26,70 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 public class BookingServiceTest {
 
-    private BookingRepository bookingRepository;
-    private UserRepository userRepository;
-    private TaxiRepository taxiRepository;
-    private ModelMapper modelMapper;
-    private BookingService bookingService;
+    @Mock private BookingRepository bookingRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private ModelMapper modelMapper;
+    @InjectMocks private BookingService bookingService;
+    @Mock private TaxiService taxiService;
 
     @BeforeEach
-    public void init() {
-        MockitoAnnotations.openMocks(this);
-        bookingRepository = mock(BookingRepository.class);
-        userRepository = mock(UserRepository.class);
-        taxiRepository = mock(TaxiRepository.class);
-        modelMapper = mock(ModelMapper.class);
-
-        bookingService =
-                new BookingService(bookingRepository, userRepository, taxiRepository, modelMapper);
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void testAddBooking() {
+    void testAddBooking3() {
+        when(bookingRepository.save(Mockito.<Booking>any())).thenReturn(new Booking());
+        when(userRepository.save(Mockito.<User>any())).thenReturn(new User());
+        User buildResult =
+                User.builder()
+                        .accountBalance(120.0d)
+                        .email("name@gmail.com")
+                        .id(1L)
+                        .name("name")
+                        .password("password")
+                        .build();
+        Optional<User> ofResult = Optional.of(buildResult);
+        when(userRepository.findById(Mockito.<Long>any())).thenReturn(ofResult);
 
-        Long userId = 1L;
-        double distance = 1.0;
-        BookingRequest request = new BookingRequest("location1", "location2");
-        User user = new User(1L, "Name", "name@email.com", "password", 100.0);
-        Taxi taxi = new Taxi(1L, "Name", "ABC123", "location1");
-        Booking booking = new Booking(1L, null, null, 100.0, null, 10.0, Status.BOOKED, user, taxi);
-        BookingResponse expectedResponse =
-                new BookingResponse(1L, "location", "location2", null, Status.BOOKED);
+        ArrayList<Taxi> taxiList = new ArrayList<>();
+        taxiList.add(new Taxi());
+        when(taxiService.findAvailableTaxis(Mockito.<String>any())).thenReturn(taxiList);
+        BookingResponse bookingResponse = new BookingResponse();
+        when(modelMapper.map(Mockito.<Object>any(), Mockito.<Class<BookingResponse>>any()))
+                .thenReturn(bookingResponse);
+        BookingResponse actualAddBookingResult =
+                bookingService.addBooking(
+                        1L, 10.0d, new BookingRequest("Pickup Location", "Dropout Location"));
+        verify(taxiService).findAvailableTaxis(Mockito.<String>any());
+        verify(modelMapper).map(Mockito.<Object>any(), Mockito.<Class<BookingResponse>>any());
+        verify(userRepository).findById(Mockito.<Long>any());
+        verify(bookingRepository).save(Mockito.<Booking>any());
+        verify(userRepository).save(Mockito.<User>any());
+        assertSame(bookingResponse, actualAddBookingResult);
+    }
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(modelMapper.map(any(Booking.class), eq(BookingResponse.class)))
-                .thenReturn(expectedResponse);
+    @Test
+    public void testEntityAlreadyExistsException() {
+        String entity = "User";
+        EntityAlreadyExistsException exception =
+                assertThrows(
+                        EntityAlreadyExistsException.class,
+                        () -> {
+                            throw new EntityAlreadyExistsException(entity);
+                        });
 
-        BookingResponse actualResponse = bookingService.addBooking(userId, distance, request);
-
-        assertEquals(expectedResponse, actualResponse);
+        assertEquals(entity, exception.getEntity());
+        assertEquals(0L, exception.getId());
+        assertEquals(entity, exception.getMessage());
     }
 
     @Test
@@ -134,7 +153,7 @@ public class BookingServiceTest {
     void testGetBooking_UserNotFound() {
         Long id = 1L;
         BookingResponse request =
-                new BookingResponse(1L, "location", "location2", null, Status.BOOKED);
+                new BookingResponse(1L, "location", "location2", 10.0, 10.0, Status.BOOKED);
         when(bookingRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> bookingService.getBooking(id));
     }

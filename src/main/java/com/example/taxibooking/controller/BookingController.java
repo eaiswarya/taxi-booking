@@ -23,12 +23,12 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    @PostMapping("/addBooking/{userId}")
+    @PostMapping("/addBooking/{user_id}")
     public @ResponseBody BookingResponse addBooking(
-            @Valid @PathVariable Long userId,
+            @Valid @PathVariable Long user_id,
             @RequestParam double distance,
             @RequestBody BookingRequest request) {
-        return bookingService.addBooking(userId, distance, request);
+        return bookingService.addBooking(user_id, distance, request);
     }
 
     @GetMapping("/details")

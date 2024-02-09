@@ -25,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public SignUpResponse userSignup(@Valid @RequestBody SignUpRequest request) {
+    public SignUpResponse signUp(@Valid @RequestBody SignUpRequest request) {
         return userService.signUp(request);
     }
 

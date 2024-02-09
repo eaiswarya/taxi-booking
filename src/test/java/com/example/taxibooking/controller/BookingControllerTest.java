@@ -40,7 +40,7 @@ public class BookingControllerTest {
                         Mockito.<Long>any(), anyDouble(), Mockito.<BookingRequest>any()))
                 .thenReturn(new BookingResponse());
         MockHttpServletRequestBuilder postResult =
-                MockMvcRequestBuilders.post("/booking/addBooking/{userId}", 1L);
+                MockMvcRequestBuilders.post("/booking/addBooking/{user_id}", 1L);
         MockHttpServletRequestBuilder contentTypeResult =
                 postResult
                         .param("distance", String.valueOf(10.0d))
@@ -59,7 +59,7 @@ public class BookingControllerTest {
                 .andExpect(
                         MockMvcResultMatchers.content()
                                 .string(
-                                        "{\"id\":null,\"pickupLocation\":null,\"dropoutLocation\":null,\"fare\":null,\"status\":null}"));
+                                        "{\"id\":null,\"pickupLocation\":null,\"dropoutLocation\":null,\"distance\":null,\"fare\":null,\"status\":null}"));
     }
 
     @Test

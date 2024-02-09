@@ -55,11 +55,11 @@ public class UserService {
         return LoginResponse.builder().token(jwtToken).build();
     }
 
-    public UpdateAccountResponse updateBalance(Long id, UpdateAccountRequest request) {
+    public UpdateAccountResponse updateBalance(Long user_id, UpdateAccountRequest request) {
         User user =
                 userRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("User", id));
+                        .findById(user_id)
+                        .orElseThrow(() -> new EntityNotFoundException("User", user_id));
         user =
                 User.builder()
                         .id(user.getId())

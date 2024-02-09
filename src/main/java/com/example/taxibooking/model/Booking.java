@@ -2,6 +2,8 @@ package com.example.taxibooking.model;
 
 import com.example.taxibooking.constant.Status;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,13 +32,15 @@ public class Booking {
     private Double fare;
     private LocalDateTime bookingTime;
     private Double distance;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "taxiId")
+    @JoinColumn(name = "taxi_id")
     private Taxi taxi;
 }

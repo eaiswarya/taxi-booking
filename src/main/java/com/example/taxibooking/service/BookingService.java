@@ -7,9 +7,9 @@ import com.example.taxibooking.exception.BookingNotFoundException;
 import com.example.taxibooking.exception.CancellationFailedException;
 import com.example.taxibooking.exception.InsufficientBalanceException;
 import com.example.taxibooking.model.Booking;
+import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.model.User;
 import com.example.taxibooking.repository.BookingRepository;
-import com.example.taxibooking.repository.TaxiRepository;
 import com.example.taxibooking.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -26,11 +26,14 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final TaxiRepository taxiRepository;
+    private final TaxiService taxiService;
     private final ModelMapper modelMapper;
 
-    public BookingResponse addBooking(Long userId, double distance, BookingRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+    public BookingResponse addBooking(Long user_id, double distance, BookingRequest request) {
+        User user = userRepository.findById(user_id).orElseThrow(EntityNotFoundException::new);
+
+        List<Taxi> availableTaxi = taxiService.findAvailableTaxis(request.getPickupLocation());
+        Taxi nearestTaxi = availableTaxi.get(0);
 
         double minimumCharge = 12.00;
         double fare = distance * minimumCharge;
@@ -45,7 +48,10 @@ public class BookingService {
                         .dropoutLocation(request.getDropoutLocation())
                         .bookingTime(LocalDateTime.now())
                         .fare(fare)
+                        .distance(distance)
                         .status(Status.BOOKED)
+                        .user(user)
+                        .taxi(nearestTaxi)
                         .build();
 
         User updatedUser =
