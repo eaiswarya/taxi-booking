@@ -48,7 +48,7 @@ public class TaxiServiceTest {
     }
 
     @Test
-    void testFindTaxi() {
+    void testFindAvailableTaxis() {
         String pickupLocation = "SomeLocation";
         Taxi taxi1 = new Taxi(1L, "Driver1", "ABC123", "SomeLocation");
         Taxi taxi2 = new Taxi(2L, "Driver2", "XYZ456", "SomeLocation");
