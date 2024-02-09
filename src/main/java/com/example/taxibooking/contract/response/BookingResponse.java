@@ -12,6 +12,7 @@ public class BookingResponse {
     private Long id;
     private String pickupLocation;
     private String dropoutLocation;
+    private Double distance;
     private Double fare;
     private Status status;
 }

@@ -4,6 +4,8 @@ import com.example.taxibooking.contract.request.TaxiRequest;
 import com.example.taxibooking.contract.response.TaxiResponse;
 import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.repository.TaxiRepository;
+import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,20 @@ public class TaxiService {
         return modelMapper.map(taxi, TaxiResponse.class);
     }
 
-    public List<TaxiResponse> findAvailableTaxis(String pickupLocation) {
-        List<Taxi> availableTaxis = taxiRepository.findByCurrentLocation(pickupLocation);
-        return availableTaxis.stream()
-                .map(taxi -> modelMapper.map(taxi, TaxiResponse.class))
-                .collect(Collectors.toList());
+    public List<Taxi> findAvailableTaxis(String pickupLocation) {
+        List<Taxi> allTaxis = taxiRepository.findAll();
+        List<Taxi> availableTaxis = new ArrayList<>();
+        for (Taxi taxis : allTaxis) {
+            if (taxis.getCurrentLocation().equals(pickupLocation)) {
+                availableTaxis.add(taxis);
+            }
+        }
+        if (availableTaxis.isEmpty()) {
+            throw new EntityNotFoundException();
+        } else {
+            return availableTaxis.stream()
+                    .map(taxi -> modelMapper.map(taxi, Taxi.class))
+                    .collect(Collectors.toList());
+        }
     }
 }

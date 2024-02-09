@@ -2,6 +2,7 @@ package com.example.taxibooking.controller;
 
 import com.example.taxibooking.contract.request.TaxiRequest;
 import com.example.taxibooking.contract.response.TaxiResponse;
+import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.service.TaxiService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -25,7 +26,7 @@ public class TaxiController {
     }
 
     @GetMapping("/available")
-    public List<TaxiResponse> availableTaxis(@RequestParam String pickupLocation) {
+    public List<Taxi> findAvailableTaxis(@RequestParam String pickupLocation) {
         return taxiService.findAvailableTaxis(pickupLocation);
     }
 }

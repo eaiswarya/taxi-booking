@@ -325,51 +325,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "balanceCheck",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZGV2IiwiaWQiOjIsInN1YiI6ImRldnVAZ21haWwuY29tIiwiaWF0IjoxNzA3MzY2NzY3LCJleHAiOjE3MDc0MDI3Njd9.tCJ0GFwTT7tuewT3_38e_uPH1KaqebSdeAF2fwAFWS8",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8082/taxi-booking/2?accountBalance=1700&fare=100",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"taxi-booking",
-						"2"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1",
-							"disabled": true
-						},
-						{
-							"key": "accountBalance",
-							"value": "1700"
-						},
-						{
-							"key": "fare",
-							"value": "100"
-						}
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }

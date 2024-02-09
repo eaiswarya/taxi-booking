@@ -10,9 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.taxibooking.contract.request.TaxiRequest;
 import com.example.taxibooking.contract.response.TaxiResponse;
+import com.example.taxibooking.model.Taxi;
 import com.example.taxibooking.service.TaxiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,17 +46,20 @@ public class TaxiControllerTest {
     }
 
     @Test
-    void testAvailableTaxis() throws Exception {
-        String pickupLocation = "location1";
-        List<TaxiResponse> expectedResponse = new ArrayList<>();
+    public void testFindAvailableTaxis() throws Exception {
 
-        when(taxiService.findAvailableTaxis(any(String.class))).thenReturn(expectedResponse);
+        String pickupLocation = "Location1";
+        List<Taxi> expectedResponse =
+                Arrays.asList(
+                        new Taxi(1L, "name", "adhhjad7888", "location1"),
+                        new Taxi(2L, "name2", "dbed7788", "location1"));
+
+        when(taxiService.findAvailableTaxis(pickupLocation)).thenReturn(expectedResponse);
 
         mockMvc.perform(
                         get("/taxi/available")
                                 .param("pickupLocation", pickupLocation)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
     }

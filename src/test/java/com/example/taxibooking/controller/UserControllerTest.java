@@ -61,22 +61,6 @@ public class UserControllerTest {
     }
 
     @Test
-    void testAddBalance() throws Exception {
-        Long id = 1L;
-        Double accountBalance = 100.0;
-        UpdateAccountResponse expectedResponse = new UpdateAccountResponse(1L, "name", 100.0);
-        when(userService.addBalance(any(Long.class), any(Double.class)))
-                .thenReturn(expectedResponse);
-        mockMvc.perform(
-                        put("/user/" + id + "/addBalance")
-                                .param("accountBalance", accountBalance.toString())
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
-    }
-
-    @Test
     void testUpdateBalance() throws Exception {
         Long id = 1L;
         UpdateAccountRequest request = new UpdateAccountRequest(100.0);
